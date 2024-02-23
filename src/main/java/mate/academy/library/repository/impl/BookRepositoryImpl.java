@@ -1,8 +1,11 @@
-package com.example.library.repository.impl;
+package mate.academy.library.repository.impl;
 
-import com.example.library.model.Book;
-import com.example.library.repository.BookRepository;
+import mate.academy.library.exception.EntityNotFoundException;
+import mate.academy.library.model.Book;
+import mate.academy.library.repository.BookRepository;
 import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -32,7 +35,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't save book in db" + book, e);
+            throw new EntityNotFoundException("Can't save book in db" + book, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -41,9 +44,19 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List findAll() {
+    public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("SELECT b FROM Book b").getResultList();
+        } catch (Exception e) {
+            throw new EntityNotFoundException("can't get all books from db", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Book book = session.get(Book.class, id);
+            return Optional.ofNullable(book);
         }
     }
 }
