@@ -1,9 +1,9 @@
 package mate.academy.library.controllers;
 
 import mate.academy.library.dto.BookDto;
+import mate.academy.library.dto.BookSearchParametersDto;
 import mate.academy.library.dto.CreateBookRequestDto;
 import mate.academy.library.service.BookService;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,5 +47,10 @@ public class BookController {
     @PutMapping("/{id}")
     public BookDto updateBookInfoById(@PathVariable Long id, @RequestBody CreateBookRequestDto requestDto) {
         return bookService.updateBookInfoById(id, requestDto);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 }
