@@ -1,5 +1,9 @@
 package mate.academy.library.dto;
 
-public record BookSearchParametersDto(String[] titles, String[] authors) {
+import lombok.Data;
 
+@Data
+public class BookSearchParametersDto {
+        String[] titles;
+        String[] authors;
 }

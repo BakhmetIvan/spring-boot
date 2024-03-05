@@ -8,13 +8,15 @@ import java.util.Arrays;
 
 @Component
 public class TitleSpecificationProvider implements SpecificationProvider<Book> {
+    private static final String TITLE_FIELD_NAME = "title";
     @Override
     public String getKey() {
-        return "title";
+        return TITLE_FIELD_NAME;
     }
 
     @Override
     public Specification<Book> getSpecification(String[] params) {
-        return (root, query, criteriaBuilder) -> root.get("title").in(Arrays.stream(params).toArray());
+        return (root, query, criteriaBuilder) -> root.get(TITLE_FIELD_NAME)
+                .in(Arrays.stream(params).toArray());
     }
 }
