@@ -1,5 +1,6 @@
 package mate.academy.library.controllers;
 
+import jakarta.validation.Valid;
 import mate.academy.library.dto.BookDto;
 import mate.academy.library.dto.BookSearchParametersDto;
 import mate.academy.library.dto.CreateBookRequestDto;
@@ -34,7 +35,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
@@ -45,7 +46,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBookInfoById(@PathVariable Long id, @RequestBody CreateBookRequestDto requestDto) {
+    public BookDto updateBookInfoById(@PathVariable Long id,
+                                      @RequestBody CreateBookRequestDto requestDto) {
         return bookService.updateBookInfoById(id, requestDto);
     }
 
