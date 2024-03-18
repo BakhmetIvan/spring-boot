@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -20,6 +21,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     private static final String ERROR_OCCURRENCE_TIME = "timestamp";
     private static final String ERROR_STATUS = "status";
     private static final String ERRORS_LIST = "errors";
+    private static final String ERROR_MESSAGE = "message";
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -45,5 +47,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             return field + " " + message;
         }
         return error.getDefaultMessage();
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(
+            RegistrationException ex
+    ) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(ERROR_OCCURRENCE_TIME, LocalDateTime.now());
+        body.put(ERROR_STATUS, HttpStatus.BAD_REQUEST);
+        body.put(ERROR_MESSAGE, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,8 +1,8 @@
 package mate.academy.library.service;
 
-import mate.academy.library.dto.BookDto;
-import mate.academy.library.dto.BookSearchParametersDto;
-import mate.academy.library.dto.CreateBookRequestDto;
+import mate.academy.library.dto.book.BookDto;
+import mate.academy.library.dto.book.BookSearchParametersDto;
+import mate.academy.library.dto.book.CreateBookRequestDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

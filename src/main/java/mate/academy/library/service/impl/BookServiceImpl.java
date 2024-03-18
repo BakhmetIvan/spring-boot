@@ -1,9 +1,9 @@
 package mate.academy.library.service.impl;
 
-import mate.academy.library.dto.BookDto;
-import mate.academy.library.dto.BookSearchParametersDto;
+import mate.academy.library.dto.book.BookDto;
+import mate.academy.library.dto.book.BookSearchParametersDto;
 import mate.academy.library.exception.EntityNotFoundException;
-import mate.academy.library.dto.CreateBookRequestDto;
+import mate.academy.library.dto.book.CreateBookRequestDto;
 import mate.academy.library.mapper.BookMapper;
 import mate.academy.library.model.Book;
 import mate.academy.library.repository.book.BookRepository;

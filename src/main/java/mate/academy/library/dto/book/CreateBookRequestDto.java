@@ -1,4 +1,4 @@
-package mate.academy.library.dto;
+package mate.academy.library.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
