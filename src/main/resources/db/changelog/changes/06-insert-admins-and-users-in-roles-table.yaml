@@ -47,7 +47,7 @@ databaseChangeLog:
                   value: ivan@gmail.com
               - column:
                   name: password
-                  value: $2a$10$IOUyu2aDufR25.rBvMnGuemNK5C7K6YpNFQ6ZbL.BlZvVjJYkwSnK
+                  value: $2a$10$5g7OzkvMRKrbMwZnX.RAT.HM1ZfWD.WJGgvX8QeG4/A5z6vmliBem
               - column:
                   name: first_name
                   value: Ivan
@@ -68,7 +68,7 @@ databaseChangeLog:
                   value: pavlo@gmail.com
               - column:
                   name: password
-                  value: $2a$10$5j5ZF66HC5ZDDGMz.tevCeto95raahbnvpyAc5xwypRUQww.Qu17O
+                  value: $2a$10$EjmilLCWN9OvbQRJMLejGOBgMJj56c0hIMa1.L0qMeymbBp25Sgv2
               - column:
                   name: first_name
                   value: Pavlo
