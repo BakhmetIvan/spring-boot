@@ -11,7 +11,7 @@ databaseChangeLog:
                   value: admin@gmail.com
               - column:
                   name: password
-                  value: $2a$10$9Fd9FpY7GfNKAFpAQLHD8eipLZlA/5fHnJ4/rAYwWEBNenvEa3s5u
+                  value: $2a$10$9Fd9FpY7GfNKAFpAQLHD8eipLZlA/5fHnJ4/rAYwWEBNenvEa3s5u  # adminpass
               - column:
                   name: first_name
                   value: Admin
@@ -29,7 +29,7 @@ databaseChangeLog:
                   value: admin2@gmail.com
               - column:
                   name: password
-                  value: $2a$10$S2wReH5LaDacQpFHzqzpxuwKytwzJGivoSHpSghu2FW17eOsNFX46
+                  value: $2a$10$AWHiKXhABKY0xRhbyGX1MObgefh3JE1FqGvWYUNbQMHCuGQe7UKYi # admin2pass
               - column:
                   name: first_name
                   value: Admin2
@@ -47,7 +47,7 @@ databaseChangeLog:
                   value: ivan@gmail.com
               - column:
                   name: password
-                  value: $2a$10$5g7OzkvMRKrbMwZnX.RAT.HM1ZfWD.WJGgvX8QeG4/A5z6vmliBem
+                  value: $2a$10$5g7OzkvMRKrbMwZnX.RAT.HM1ZfWD.WJGgvX8QeG4/A5z6vmliBem # ivanpass
               - column:
                   name: first_name
                   value: Ivan
@@ -68,7 +68,7 @@ databaseChangeLog:
                   value: pavlo@gmail.com
               - column:
                   name: password
-                  value: $2a$10$EjmilLCWN9OvbQRJMLejGOBgMJj56c0hIMa1.L0qMeymbBp25Sgv2
+                  value: $2a$10$EjmilLCWN9OvbQRJMLejGOBgMJj56c0hIMa1.L0qMeymbBp25Sgv2 # pavelpass
               - column:
                   name: first_name
                   value: Pavlo

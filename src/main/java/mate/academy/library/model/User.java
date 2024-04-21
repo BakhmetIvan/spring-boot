@@ -9,7 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -19,8 +21,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 @Entity
+@Getter
+@Setter
+@RequiredArgsConstructor
 @SQLDelete(sql = "UPDATE users SET is_deleted = TRUE WHERE id =?")
 @SQLRestriction(value = "is_deleted = FALSE")
 @Table(name = "users")
