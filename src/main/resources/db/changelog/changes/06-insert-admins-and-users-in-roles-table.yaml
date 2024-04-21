@@ -1,0 +1,123 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-admins-and-users-in-users-table
+      author: bakhmetIvan
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$9Fd9FpY7GfNKAFpAQLHD8eipLZlA/5fHnJ4/rAYwWEBNenvEa3s5u  # adminpass
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: Adminov
+              - column:
+                  name: is_deleted
+                  value: 0
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin2@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$AWHiKXhABKY0xRhbyGX1MObgefh3JE1FqGvWYUNbQMHCuGQe7UKYi # admin2pass
+              - column:
+                  name: first_name
+                  value: Admin2
+              - column:
+                  name: last_name
+                  value: Adminov2
+              - column:
+                  name: is_deleted
+                  value: 0
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: ivan@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$5g7OzkvMRKrbMwZnX.RAT.HM1ZfWD.WJGgvX8QeG4/A5z6vmliBem # ivanpass
+              - column:
+                  name: first_name
+                  value: Ivan
+              - column:
+                  name: last_name
+                  value: Bakhmet
+              - column:
+                  name: shopping_address
+                  value: Lugansk
+              - column:
+                  name: is_deleted
+                  value: 0
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: pavlo@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$EjmilLCWN9OvbQRJMLejGOBgMJj56c0hIMa1.L0qMeymbBp25Sgv2 # pavelpass
+              - column:
+                  name: first_name
+                  value: Pavlo
+              - column:
+                  name: last_name
+                  value: Chernyavskiy
+              - column:
+                  name: shopping_address
+                  value: Kherson
+              - column:
+                  name: is_deleted
+                  value: 0
+  - changeSet:
+      id: tie_users_and_roles
+      author: bakhmetIvan
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: role_id
+                  value: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 4
+              - column:
+                  name: role_id
+                  value: 1
