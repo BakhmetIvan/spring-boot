@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName(Role.RoleName.ROLE_USER));
         user.setRoles(roles);
-        user.setPassword(passwordEncoder.encode(requestDto.getEmail()));
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
