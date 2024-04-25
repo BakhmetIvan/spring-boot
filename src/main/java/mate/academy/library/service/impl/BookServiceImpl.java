@@ -1,6 +1,7 @@
 package mate.academy.library.service.impl;
 
 import mate.academy.library.dto.book.BookDto;
+import mate.academy.library.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.library.dto.book.BookSearchParametersDto;
 import mate.academy.library.exception.EntityNotFoundException;
 import mate.academy.library.dto.book.CreateBookRequestDto;
@@ -60,6 +61,13 @@ public class BookServiceImpl implements BookService {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoriesId(Long id, Pageable pageable) {
+        return bookRepository.findAllByCategoriesId(id, pageable).stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 }
