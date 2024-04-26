@@ -44,7 +44,6 @@ public class User implements UserDetails {
     private String shoppingAddress;
     @ToString.Exclude
     @ManyToMany
-    @Column(nullable = false)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

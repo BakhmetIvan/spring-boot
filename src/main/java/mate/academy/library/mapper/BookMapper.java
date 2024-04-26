@@ -35,4 +35,6 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
         book.setCategories(categories);
     }
+
+    void updateBookFromDto(CreateBookRequestDto bookRequestDto, @MappingTarget Book book);
 }
