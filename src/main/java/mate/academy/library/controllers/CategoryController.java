@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import mate.academy.library.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.library.dto.category.CategoryDto;
+import mate.academy.library.dto.category.CategoryRequestDto;
 import mate.academy.library.service.BookService;
 import mate.academy.library.service.CategoryService;
 import org.springdoc.core.annotations.ParameterObject;
@@ -36,7 +37,7 @@ public class CategoryController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Create new category", description = "Creates a new category entry in the database")
-    public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
+    public CategoryDto createCategory(@RequestBody @Valid CategoryRequestDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
@@ -58,7 +59,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     @Operation(summary = "Update category by id", description = "Updates a category info in the database")
     public CategoryDto updateCategory(@PathVariable @Positive Long id,
-                                      @RequestBody @Valid CategoryDto categoryDto) {
+                                      @RequestBody @Valid CategoryRequestDto categoryDto) {
         return categoryService.update(id, categoryDto);
     }
 
