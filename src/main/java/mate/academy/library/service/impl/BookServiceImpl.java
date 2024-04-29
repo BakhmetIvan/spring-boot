@@ -1,6 +1,6 @@
 package mate.academy.library.service.impl;
 
-import mate.academy.library.dto.book.BookDto;
+import mate.academy.library.dto.book.BookResponseDto;
 import mate.academy.library.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.library.dto.book.BookSearchParametersDto;
 import mate.academy.library.exception.EntityNotFoundException;
@@ -24,20 +24,20 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
-    public BookDto save(CreateBookRequestDto requestDto) {
+    public BookResponseDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public List<BookDto> findAll(Pageable pageable) {
+    public List<BookResponseDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
-    public BookDto findById(Long id) {
+    public BookResponseDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id " + id)
         );
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBookInfoById(Long id, CreateBookRequestDto requestDto) {
+    public BookResponseDto updateBookInfoById(Long id, CreateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id " + id)
         );
@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
+    public List<BookResponseDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)

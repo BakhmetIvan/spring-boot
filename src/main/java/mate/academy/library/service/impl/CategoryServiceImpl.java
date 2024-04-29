@@ -1,7 +1,7 @@
 package mate.academy.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import mate.academy.library.dto.category.CategoryDto;
+import mate.academy.library.dto.category.CategoryResponseDto;
 import mate.academy.library.dto.category.CategoryRequestDto;
 import mate.academy.library.exception.EntityNotFoundException;
 import mate.academy.library.mapper.CategoryMapper;
@@ -19,14 +19,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
+    public List<CategoryResponseDto> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable).stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
 
     @Override
-    public CategoryDto getById(Long id) {
+    public CategoryResponseDto getById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find category by id: " + id)
         );
@@ -34,13 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto save(CategoryRequestDto categoryDto) {
+    public CategoryResponseDto save(CategoryRequestDto categoryDto) {
         Category category = categoryMapper.toModel(categoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
-    public CategoryDto update(Long id, CategoryRequestDto categoryDto) {
+    public CategoryResponseDto update(Long id, CategoryRequestDto categoryDto) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find category by id: " + id)
         );

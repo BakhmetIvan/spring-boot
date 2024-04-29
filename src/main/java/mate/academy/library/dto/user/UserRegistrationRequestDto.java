@@ -26,9 +26,9 @@ public class UserRegistrationRequestDto {
     @Length(min = 8, max = 20)
     @ToString.Exclude
     private String repeatPassword;
-    @NotNull
+    @NotBlank
     private String firstName;
-    @NotNull
+    @NotBlank
     private String lastName;
     private String shoppingAddress;
 }

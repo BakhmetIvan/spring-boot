@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import mate.academy.library.dto.book.BookDto;
+import mate.academy.library.dto.book.BookResponseDto;
 import mate.academy.library.dto.book.BookSearchParametersDto;
 import mate.academy.library.dto.book.CreateBookRequestDto;
 import mate.academy.library.service.BookService;
@@ -35,21 +35,21 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @GetMapping
     @Operation(summary = "Get all books", description = "Retrieves all books from the database")
-    public List<BookDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
+    public List<BookResponseDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Retrieves a book by its identifier")
-    public BookDto getBookById(@PathVariable @Positive Long id) {
+    public BookResponseDto getBookById(@PathVariable @Positive Long id) {
         return bookService.findById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     @Operation(summary = "Create new book", description = "Creates a new book entry in the database")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
@@ -64,17 +64,15 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Updates a book info in the database")
-    public BookDto updateBookInfoById(@PathVariable @Positive Long id,
-                                      @RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto updateBookInfoById(@PathVariable @Positive Long id,
+                                              @RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.updateBookInfoById(id, requestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @GetMapping("/search")
     @Operation(summary = "Search books", description = "Search books by search parameters")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters, @PageableDefault Pageable pageable) {
+    public List<BookResponseDto> searchBooks(BookSearchParametersDto searchParameters, @PageableDefault Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }
 }
-
-

@@ -1,11 +1,11 @@
 package mate.academy.library.dto.category;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class CategoryRequestDto {
-    @NotNull
+    @NotBlank
     private String name;
     private String description;
 }
