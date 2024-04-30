@@ -31,7 +31,7 @@ public interface BookMapper {
     @AfterMapping
     default void setCategories(@MappingTarget Book book, CreateBookRequestDto requestDto) {
         Set<Category> categories = requestDto.getCategoryIds().stream()
-                .map(id -> new Category.Builder().id(id).build())
+                .map(id -> Category.builder().id(id).build())
                 .collect(Collectors.toSet());
         book.setCategories(categories);
     }

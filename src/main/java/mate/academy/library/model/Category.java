@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -15,7 +17,9 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET is_deleted = TRUE WHERE id =?")
 @SQLRestriction(value = "is_deleted = FALSE")
 @Table(name = "categories")
@@ -28,40 +32,4 @@ public class Category {
     private String description;
     @Column(nullable = false)
     private boolean isDeleted = false;
-
-    public static class Builder {
-        private Long id;
-        private String name;
-        private String description;
-        private boolean isDeleted;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder isDeleted(boolean isDeleted) {
-            this.isDeleted = isDeleted;
-            return this;
-        }
-
-        public Category build() {
-            Category category = new Category();
-            category.setId(this.id);
-            category.setName(this.name);
-            category.setDescription(this.description);
-            category.setDeleted(this.isDeleted);
-            return category;
-        }
-    }
 }
