@@ -14,7 +14,7 @@ public class UserLoginRequestDto {
     @Size(max = 255)
     private String email;
     @NotBlank
-    @Length(min = 8, max = 20)
+    @Length(min = 8, max = 100)
     @ToString.Exclude
     private String password;
 }

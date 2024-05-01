@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CategoryRequestDto {
     @NotBlank
-    @Size(max = 255)
+    @Size(max = 100)
     private String name;
     @Size(max = 255)
     private String description;

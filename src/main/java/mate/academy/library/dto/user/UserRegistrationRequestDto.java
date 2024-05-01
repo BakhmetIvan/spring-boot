@@ -20,11 +20,11 @@ public class UserRegistrationRequestDto {
     @Size(max = 255)
     private String email;
     @NotBlank
-    @Length(min = 8, max = 20)
+    @Length(min = 8, max = 100)
     @ToString.Exclude
     private String password;
     @NotBlank
-    @Length(min = 8, max = 20)
+    @Length(min = 8, max = 100)
     @ToString.Exclude
     private String repeatPassword;
     @NotBlank

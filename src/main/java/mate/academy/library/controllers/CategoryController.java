@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/categories")
@@ -42,13 +44,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @Operation(summary = "Get all categories", description = "Retrieves all categories from the database")
     public List<CategoryResponseDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Get category by id", description = "Retrieves a category by its identifier")
     public CategoryResponseDto getCategoryById(@PathVariable @Positive Long id) {
@@ -73,7 +75,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable @Positive Long id, @PageableDefault Pageable pageable) {
         return bookService.findAllByCategoriesId(id, pageable);
     }

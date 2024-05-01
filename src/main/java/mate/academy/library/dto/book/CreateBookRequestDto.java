@@ -3,6 +3,7 @@ package mate.academy.library.dto.book;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class CreateBookRequestDto {
         @Size(max = 255)
         String isbn;
         @NotNull
-        @DecimalMin(value = "0.01")
+        @Positive
         BigDecimal price;
         Set<Long> categoryIds;
         @Size(max = 255)
