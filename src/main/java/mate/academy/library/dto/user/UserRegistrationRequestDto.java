@@ -2,7 +2,7 @@ package mate.academy.library.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 import mate.academy.library.validation.FieldMatch;
@@ -17,18 +17,22 @@ import org.hibernate.validator.constraints.Length;
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email
+    @Size(max = 255)
     private String email;
     @NotBlank
-    @Length(min = 8, max = 20)
+    @Length(min = 8, max = 100)
     @ToString.Exclude
     private String password;
     @NotBlank
-    @Length(min = 8, max = 20)
+    @Length(min = 8, max = 100)
     @ToString.Exclude
     private String repeatPassword;
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String firstName;
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String lastName;
+    @Size(max = 255)
     private String shoppingAddress;
 }
