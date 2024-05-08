@@ -59,4 +59,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(ERROR_MESSAGE, ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(ERROR_OCCURRENCE_TIME, LocalDateTime.now());
+        body.put(ERROR_STATUS, HttpStatus.FORBIDDEN.value());
+        body.put(ERROR_MESSAGE, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
+    }
 }

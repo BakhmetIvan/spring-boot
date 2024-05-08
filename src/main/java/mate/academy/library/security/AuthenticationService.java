@@ -24,7 +24,6 @@ public class AuthenticationService {
         );
         UserDetails user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find user by email: " + requestDto.getEmail()));
-
         String jwt = jwtUtil.generateToken(user);
         return new UserLoginResponseDto(jwt);
     }
