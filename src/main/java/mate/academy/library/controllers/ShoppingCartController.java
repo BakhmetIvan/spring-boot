@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import mate.academy.library.dto.shoppingcart.CartItemDto;
 import mate.academy.library.dto.shoppingcart.CartItemRequestDto;
+import mate.academy.library.dto.shoppingcart.CartItemUpdateRequestDto;
 import mate.academy.library.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.library.model.User;
 import mate.academy.library.service.ShoppingCartService;
@@ -56,10 +57,10 @@ public class ShoppingCartController {
     @Operation(summary = "Update book quantity",
             description = "Updates quantity of books for the cart item")
     public CartItemDto updateQuantity(@PathVariable @Positive Long id,
-                                      @Positive int quantity,
-                                      Authentication authentication) {
+                                   @RequestBody CartItemUpdateRequestDto requestDto,
+                                   Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return shoppingCartService.updateQuantity(id, quantity, user);
+        return shoppingCartService.updateQuantity(id, requestDto, user);
     }
 
     @DeleteMapping("/cart-items/{id}")

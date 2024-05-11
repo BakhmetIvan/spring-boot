@@ -7,7 +7,6 @@ import mate.academy.library.model.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 @Mapper(config = MapperConfig.class, uses = BookMapper.class)
 public interface CartItemMapper {
     @Mapping(source = "book.id", target = "bookId")
