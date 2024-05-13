@@ -1,12 +1,10 @@
 package mate.academy.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import mate.academy.library.dto.shoppingcart.CartItemDto;
 import mate.academy.library.dto.shoppingcart.CartItemRequestDto;
 import mate.academy.library.dto.shoppingcart.CartItemUpdateRequestDto;
 import mate.academy.library.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.library.exception.EntityNotFoundException;
-import mate.academy.library.mapper.CartItemMapper;
 import mate.academy.library.mapper.ShoppingCartMapper;
 import mate.academy.library.model.Book;
 import mate.academy.library.model.CartItem;
@@ -16,17 +14,14 @@ import mate.academy.library.repository.book.BookRepository;
 import mate.academy.library.repository.cartitem.CartItemRepository;
 import mate.academy.library.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.library.service.ShoppingCartService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.LinkedHashSet;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
-    private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
     private final BookRepository bookRepository;
 
@@ -37,8 +32,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
+    @Transactional
     @Override
-    public CartItemDto saveCartItem(CartItemRequestDto requestDto, User user) {
+    public ShoppingCartResponseDto saveCartItem(CartItemRequestDto requestDto, User user) {
         Book book = bookRepository.findById(requestDto.getBookId()).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id: "
                         + requestDto.getBookId())
@@ -47,20 +43,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = new CartItem();
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setBook(book);
-        return cartItemMapper.toDto(cartItemRepository.save(cartItem));
-    }
-
-    @Override
-    public ShoppingCartResponseDto getShoppingCart(User user, Pageable pageable) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
-        Page<CartItem> cartItems = cartItemRepository.
-                findAllByShoppingCartId(shoppingCart.getId(), pageable);
-        shoppingCart.setCartItems(new LinkedHashSet<>(cartItems.getContent()));
+        cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
-    public CartItemDto updateQuantity(Long id, CartItemUpdateRequestDto requestDto, User user) {
+    public ShoppingCartResponseDto getShoppingCart(User user) {
+        return shoppingCartMapper.toDto(shoppingCartRepository.findShoppingCartByUser(user));
+    }
+
+    @Transactional
+    @Override
+    public ShoppingCartResponseDto updateQuantity(Long id, CartItemUpdateRequestDto requestDto, User user) {
         ShoppingCart cart = shoppingCartRepository.findShoppingCartByUser(user);
         CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(id, cart.getId())
                 .map(item -> {
@@ -71,9 +65,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 id, user.getId())
                 ));
         cartItemRepository.save(cartItem);
-        return cartItemMapper.toDto(cartItem);
+        return shoppingCartMapper.toDto(cart);
     }
 
+    @Transactional
     @Override
     public void deleteCartItemById(Long id, User user) {
         ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);

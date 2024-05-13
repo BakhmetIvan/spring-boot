@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import mate.academy.library.dto.shoppingcart.CartItemDto;
 import mate.academy.library.dto.shoppingcart.CartItemRequestDto;
 import mate.academy.library.dto.shoppingcart.CartItemUpdateRequestDto;
 import mate.academy.library.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.library.model.User;
 import mate.academy.library.service.ShoppingCartService;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/cart")
+@RequestMapping("/cart")
 @Tag(name = "Shopping carts management", description = "Endpoint for mapping shopping carts")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
@@ -36,17 +34,16 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Get shopping cart",
             description = "Returns the current user's shopping cart")
-    public ShoppingCartResponseDto getShoppingCart(Authentication authentication,
-                                                   Pageable pageable) {
+    public ShoppingCartResponseDto getShoppingCart(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return shoppingCartService.getShoppingCart(user, pageable);
+        return shoppingCartService.getShoppingCart(user);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Save cart item",
             description = "Save the cart item for the current user's shopping cart")
-    public CartItemDto saveCartItem(@RequestBody @Valid CartItemRequestDto requestDto,
+    public ShoppingCartResponseDto saveCartItem(@RequestBody @Valid CartItemRequestDto requestDto,
                                     Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.saveCartItem(requestDto, user);
@@ -56,7 +53,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Update book quantity",
             description = "Updates quantity of books for the cart item")
-    public CartItemDto updateQuantity(@PathVariable @Positive Long id,
+    public ShoppingCartResponseDto updateQuantity(@PathVariable @Positive Long id,
                                    @RequestBody CartItemUpdateRequestDto requestDto,
                                    Authentication authentication) {
         User user = (User) authentication.getPrincipal();
