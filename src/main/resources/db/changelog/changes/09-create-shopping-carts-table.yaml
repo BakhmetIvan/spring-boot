@@ -21,6 +21,11 @@ databaseChangeLog:
                     foreignKeyName: fk_shopping_cart_user
                     references: users(id)
                     deleteCascade: true
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: false
   - changeSet:
       id: create-cart-items-table
       author: bakhmetIvan
@@ -64,6 +69,9 @@ databaseChangeLog:
               - column:
                   name: user_id
                   value: 3
+              - column:
+                  name: is_deleted
+                  value: 0
   - changeSet:
       id: insert-cart-items
       author: bakhmetIvan
