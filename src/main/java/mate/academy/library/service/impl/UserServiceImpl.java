@@ -9,9 +9,11 @@ import mate.academy.library.model.Role;
 import mate.academy.library.model.User;
 import mate.academy.library.repository.role.RoleRepository;
 import mate.academy.library.repository.user.UserRepository;
+import mate.academy.library.service.ShoppingCartService;
 import mate.academy.library.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +24,9 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
 
+    @Transactional
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
@@ -35,6 +39,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user = userRepository.save(user);
+        shoppingCartService.createShoppingCart(user);
         return userMapper.toDto(user);
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/categories")
+@RequestMapping("/categories")
 @Tag(name = "Categories management", description = "Endpoint for mapping categories")
 public class CategoryController {
     private final CategoryService categoryService;
