@@ -11,7 +11,7 @@ import mate.academy.library.model.CartItem;
 import mate.academy.library.model.ShoppingCart;
 import mate.academy.library.model.User;
 import mate.academy.library.repository.book.BookRepository;
-import mate.academy.library.repository.cartitem.CartItemRepository;
+import mate.academy.library.repository.shoppingcart.CartItemRepository;
 import mate.academy.library.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.library.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
