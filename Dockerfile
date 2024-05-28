@@ -10,5 +10,5 @@ COPY --from=builder library/dependencies/ ./
 COPY --from=builder library/spring-boot-loader/ ./
 COPY --from=builder library/snapshot-dependencies/ ./
 COPY --from=builder library/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"gig]
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 EXPOSE 8088

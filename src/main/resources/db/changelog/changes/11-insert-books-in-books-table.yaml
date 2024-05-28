@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-books
+      author: bakhmetIvan
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Alice's adventures in Wonderland"
+              - column:
+                  name: author
+                  value: "Lewis Carroll"
+              - column:
+                  name: isbn
+                  value: "9780194229647"
+              - column:
+                  name: price
+                  value: 49.99
+              - column:
+                  name: description
+                  value: "Alice fearlessly jumps down the rabbit hole and finds herself in an 
+                  unusual country, where the situation and the girl herself change every minute"
+              - column:
+                  name: cover_image
+                  value: "alica.jpg"
+              - column:
+                  name: is_deleted
+                  value: 0
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Ulysses"
+              - column:
+                  name: author
+                  value: "James Augustine Aloysius Joyce"
+              - column:
+                  name: isbn
+                  value: "9780194229647"
+              - column:
+                  name: price
+                  value: 44.99
+              - column:
+                  name: description
+                  value: "Ulysses is a modernist novel by Irish writer James Joyce. Ulysses is a
+                   complex polystylistic work"
+              - column:
+                  name: cover_image
+                  value: "ulysses.jpg"
+              - column:
+                  name: is_deleted
+                  value: 0
