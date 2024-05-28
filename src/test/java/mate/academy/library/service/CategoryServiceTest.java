@@ -1,5 +1,8 @@
 package mate.academy.library.service;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 import mate.academy.library.dto.category.CategoryRequestDto;
 import mate.academy.library.dto.category.CategoryResponseDto;
 import mate.academy.library.exception.EntityNotFoundException;
@@ -17,12 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {

@@ -9,7 +9,6 @@ import mate.academy.library.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.library.dto.book.BookResponseDto;
 import mate.academy.library.dto.book.BookSearchParametersDto;
 import mate.academy.library.dto.book.CreateBookRequestDto;
-import mate.academy.library.dto.category.CategoryResponseDto;
 import mate.academy.library.exception.EntityNotFoundException;
 import mate.academy.library.mapper.BookMapper;
 import mate.academy.library.model.Book;
