@@ -21,6 +21,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,8 +31,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@Sql(scripts = {
+        "classpath:database/book/add-books-to-books-table.sql",
+        "classpath:database/category/add-categories-to-categories-table.sql",
+        "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {
+        "classpath:database/books_categories/remove-book-category-from-table.sql",
+        "classpath:database/category/remove-categories-from-categories-table.sql",
+        "classpath:database/book/remove-books-from-books-table.sql"
+}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerTest {
+    private static final BookResponseDto FIRST_BOOK_RESPONSE_DTO = new BookResponseDto()
+            .setId(1L)
+            .setTitle("Book1")
+            .setAuthor("Author1")
+            .setIsbn("isbn1")
+            .setPrice(BigDecimal.valueOf(10).setScale(2))
+            .setDescription("description1")
+            .setCoverImage("coverImage1")
+            .setCategoryIds(Set.of(1L));
+    private static final BookResponseDto SECOND_BOOK_RESPONSE_DTO = new BookResponseDto()
+            .setId(2L)
+            .setTitle("Book2")
+            .setAuthor("Author2")
+            .setIsbn("isbn2")
+            .setPrice(BigDecimal.valueOf(20).setScale(2))
+            .setDescription("description2")
+            .setCoverImage("coverImage2")
+            .setCategoryIds(Set.of(1L));
     protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -47,34 +77,20 @@ public class BookControllerTest {
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Test
-    @Sql(scripts =
-            "classpath:database/category/add-categories-to-categories-table.sql",
-    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Save a new book")
     public void saveBook_ValidRequest_WillReturnTheBookDto() throws Exception {
         CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto()
-                .setTitle("Test Book")
-                .setAuthor("Test Author")
-                .setIsbn("978-161-729-045-9")
-                .setPrice(BigDecimal.valueOf(100.0))
-                .setDescription("Test Description")
-                .setCoverImage("Test Cover Image")
-                .setCategoryIds(Set.of(1L, 2L));
-        BookResponseDto exceptedBookDto = new BookResponseDto()
-                .setId(1L)
-                .setTitle(createBookRequestDto.getTitle())
-                .setAuthor(createBookRequestDto.getAuthor())
-                .setIsbn(createBookRequestDto.getIsbn())
-                .setPrice(createBookRequestDto.getPrice())
-                .setDescription(createBookRequestDto.getDescription())
-                .setCoverImage(createBookRequestDto.getCoverImage())
-                .setCategoryIds(createBookRequestDto.getCategoryIds());
+                .setTitle(FIRST_BOOK_RESPONSE_DTO.getTitle())
+                .setAuthor(FIRST_BOOK_RESPONSE_DTO.getAuthor())
+                .setIsbn(FIRST_BOOK_RESPONSE_DTO.getIsbn())
+                .setPrice(FIRST_BOOK_RESPONSE_DTO.getPrice())
+                .setDescription(FIRST_BOOK_RESPONSE_DTO.getDescription())
+                .setCoverImage(FIRST_BOOK_RESPONSE_DTO.getCoverImage())
+                .setCategoryIds(FIRST_BOOK_RESPONSE_DTO.getCategoryIds());
+        BookResponseDto exceptedBookDto = FIRST_BOOK_RESPONSE_DTO;
 
         String jsonRequest = objectMapper.writeValueAsString(createBookRequestDto);
 
@@ -95,39 +111,11 @@ public class BookControllerTest {
 
     @WithMockUser(username = "user")
     @Test
-    @Sql(scripts = {
-            "classpath:database/book/add-books-to-books-table.sql",
-            "classpath:database/category/add-categories-to-categories-table.sql",
-            "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Get all books")
     void getAll_GivenBooksInCatalog_ShouldReturnAllBooks() throws Exception {
         List<BookResponseDto> expected = new ArrayList<>();
-        expected.add(new BookResponseDto()
-                .setId(1L)
-                .setTitle("Book1")
-                .setAuthor("Author1")
-                .setIsbn("isbn1")
-                .setPrice(BigDecimal.valueOf(10).setScale(2))
-                .setDescription("description1")
-                .setCoverImage("coverImage1")
-                .setCategoryIds(Set.of(1L))
-        );
-        expected.add(new BookResponseDto()
-                .setId(2L)
-                .setTitle("Book2")
-                .setAuthor("Author2")
-                .setIsbn("isbn2")
-                .setPrice(BigDecimal.valueOf(20).setScale(2))
-                .setDescription("description2")
-                .setCoverImage("coverImage2")
-                .setCategoryIds(Set.of(1L))
-        );
+        expected.add(FIRST_BOOK_RESPONSE_DTO);
+        expected.add(SECOND_BOOK_RESPONSE_DTO);
 
         MvcResult result = mockMvc.perform(
                         get("/books")
@@ -143,28 +131,10 @@ public class BookControllerTest {
 
     @WithMockUser(username = "user")
     @Test
-    @Sql(scripts = {
-            "classpath:database/book/add-books-to-books-table.sql",
-            "classpath:database/category/add-categories-to-categories-table.sql",
-            "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Get book by id")
     void getBookById_ValidId_ShouldReturnValidBookDto() throws Exception {
         Long id = 2L;
-        BookResponseDto expectedBookDto = new BookResponseDto()
-                .setId(2L)
-                .setTitle("Book2")
-                .setAuthor("Author2")
-                .setIsbn("isbn2")
-                .setPrice(BigDecimal.valueOf(20).setScale(2))
-                .setDescription("description2")
-                .setCoverImage("coverImage2")
-                .setCategoryIds(Set.of(1L));
+        BookResponseDto expectedBookDto = SECOND_BOOK_RESPONSE_DTO;
 
         MvcResult result = mockMvc.perform(
                         get("/books/{id}", id)
@@ -182,16 +152,6 @@ public class BookControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(scripts = {
-            "classpath:database/book/add-books-to-books-table.sql",
-            "classpath:database/category/add-categories-to-categories-table.sql",
-            "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Update book by id")
     void update_ValidRequest_ShouldReturnUpdatedBookDto() throws Exception {
         Long id = 2L;
@@ -231,16 +191,6 @@ public class BookControllerTest {
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
-    @Sql(scripts = {
-            "classpath:database/book/add-books-to-books-table.sql",
-            "classpath:database/category/add-categories-to-categories-table.sql",
-            "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Delete book by id")
     void delete_ValidId_ShouldDeleteCorrectBook() throws Exception {
         Long id = 1L;
@@ -252,27 +202,9 @@ public class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user")
-    @Sql(scripts = {
-            "classpath:database/book/add-books-to-books-table.sql",
-            "classpath:database/category/add-categories-to-categories-table.sql",
-            "classpath:database/books_categories/add-book-category-to-books-categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:database/books_categories/remove-book-category-from-table.sql",
-            "classpath:database/category/remove-categories-from-categories-table.sql",
-            "classpath:database/book/remove-books-from-books-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Search books by parameters")
     void searchBooks_ValidBookSearchParametersDto_ShouldReturnValidBookDto() throws Exception {
-        BookResponseDto expected = new BookResponseDto()
-                .setId(1L)
-                .setTitle("Book1")
-                .setAuthor("Author1")
-                .setIsbn("isbn1")
-                .setPrice(BigDecimal.valueOf(10).setScale(2))
-                .setDescription("description1")
-                .setCoverImage("coverImage1")
-                .setCategoryIds(Set.of(1L));
+        BookResponseDto expected = FIRST_BOOK_RESPONSE_DTO;
 
         BookSearchParametersDto bookSearchParametersDto = new BookSearchParametersDto();
         bookSearchParametersDto.setTitles(new String[]{"Book1"});

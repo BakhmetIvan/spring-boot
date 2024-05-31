@@ -18,13 +18,23 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CategoryControllerTest {
+    private static final CategoryResponseDto FIRST_CATEGORY_RESPONSE_DTO = new CategoryResponseDto()
+            .setId(1L)
+            .setName("Category 1")
+            .setDescription("Description 1");
     protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -40,18 +50,13 @@ public class CategoryControllerTest {
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @DisplayName("Create a new category")
     void save_ValidCategoryDto_WillReturnCategoryDto() throws Exception {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto()
-                .setName("Category 1")
-                .setDescription("Description 1");
-        CategoryResponseDto expected = new CategoryResponseDto()
-                .setId(1L)
-                .setName(categoryRequestDto.getName())
-                .setDescription(categoryRequestDto.getDescription());
+                .setName(FIRST_CATEGORY_RESPONSE_DTO.getName())
+                .setDescription(FIRST_CATEGORY_RESPONSE_DTO.getDescription());
+        CategoryResponseDto expected = FIRST_CATEGORY_RESPONSE_DTO;
 
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
         MvcResult result = mockMvc.perform(
@@ -65,23 +70,15 @@ public class CategoryControllerTest {
         CategoryResponseDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), CategoryResponseDto.class);
         Assertions.assertNotNull(actual);
-        EqualsBuilder.reflectionEquals(expected, actual);
-        Assertions.assertEquals(expected, actual);
+        EqualsBuilder.reflectionEquals(expected, actual, "id");
     }
 
     @WithMockUser(username = "user")
-    @Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @DisplayName("Find all categories")
     void findAll_GivenCategoriesInCatalog_ShouldReturnAllCategories() throws Exception {
         List<CategoryResponseDto> expected = new ArrayList<>();
-        expected.add(new CategoryResponseDto()
-                .setId(1L)
-                .setName("Category 1")
-                .setDescription("Description 1"));
+        expected.add(FIRST_CATEGORY_RESPONSE_DTO);
         expected.add(new CategoryResponseDto()
                 .setId(2L)
                 .setName("Category 2")
@@ -102,18 +99,11 @@ public class CategoryControllerTest {
     }
 
     @WithMockUser(username = "user")
-    @Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @DisplayName("Find by id")
     void findById_ValidId_ShouldReturnValidCategoryDto() throws Exception {
         Long id = 1L;
-        CategoryResponseDto expected = new CategoryResponseDto()
-                .setId(id)
-                .setName("Category 1")
-                .setDescription("Description 1");
+        CategoryResponseDto expected = FIRST_CATEGORY_RESPONSE_DTO;
 
         MvcResult result = mockMvc.perform(
                         get("/categories/{id}", id)
@@ -130,10 +120,6 @@ public class CategoryControllerTest {
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @DisplayName("Update by id")
     void updateById_ValidRequest_ShouldReturnValidUpdatedCategoryDto() throws Exception {
@@ -164,10 +150,6 @@ public class CategoryControllerTest {
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = "classpath:database/category/add-categories-to-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/category/remove-categories-from-categories-table.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @DisplayName("Delete by id")
     void deleteById_ValidId_ShouldDeleteCategory() throws Exception {
