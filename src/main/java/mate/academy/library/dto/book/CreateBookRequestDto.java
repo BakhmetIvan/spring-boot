@@ -1,15 +1,16 @@
 package mate.academy.library.dto.book;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
+@Accessors(chain = true)
 public class CreateBookRequestDto {
         @NotBlank
         @Size(max = 255)
