@@ -25,7 +25,7 @@ The demand for online shopping is growing every day. People are accustomed to th
 - **Swagger**: Provides comprehensive and interactive API documentation, making it easier for developers to understand and interact with the API endpoints.
 - **Liquibase**: Facilitates smooth database schema updates and version control, ensuring consistent and reliable database management.
 
-## Project Structure
+## Database Structure
 ![Class_Diagram](Class_Diagram.png)
 
 ## Project controllers
